@@ -1,0 +1,738 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── packages ──────────────────────────────────────────────────────────────────
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{mdframed}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% ── colours ───────────────────────────────────────────────────────────────────
+\definecolor{spunavy}{HTML}{002147}
+\definecolor{spugold}{HTML}{C9A84C}
+\definecolor{fraudred}{HTML}{C0392B}
+\definecolor{lightgray}{HTML}{F5F5F5}
+\definecolor{midgray}{HTML}{CCCCCC}
+
+% ── hyperref setup ─────────────────────────────────────────────────────────────
+\hypersetup{
+    colorlinks = true,
+    linkcolor  = spunavy,
+    citecolor  = spunavy,
+    urlcolor   = spunavy,
+}
+
+% ── section formatting ────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{spunavy}}{\thesection}{1em}{}[\color{spunavy}\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{spunavy}}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% ── header / footer ───────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{spunavy}{Project 5 | Fraudster Evolution Simulator}}
+\fancyhead[R]{\small\textcolor{spunavy}{Tshegofatso Shabangu}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\color{spunavy}\hrule width\headwidth height\headrulewidth}
+
+% ── caption styling ───────────────────────────────────────────────────────────
+\captionsetup{
+    font       = small,
+    labelfont  = {bf, color=spunavy},
+    labelsep   = period,
+}
+
+% ── table column types ────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% ── document begins ───────────────────────────────────────────────────────────
+\begin{document}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+%  COVER PAGE
+% ═══════════════════════════════════════════════════════════════════════════════
+\begin{titlepage}
+\pagecolor{spunavy}
+\color{white}
+\centering
+\vspace*{1.5cm}
+
+{\fontsize{11}{14}\selectfont\textcolor{spugold}{\textbf{SOL PLAATJE UNIVERSITY}}}\\[0.3cm]
+{\fontsize{10}{13}\selectfont Department of Computer Science and Mathematics}\\[0.2cm]
+{\fontsize{9}{12}\selectfont SA Banking Fraud Detection Series \textbf{|} Project 5 of 20}
+
+\vspace{1.2cm}
+\textcolor{spugold}{\rule{\textwidth}{0.6pt}}
+\vspace{0.6cm}
+
+{\fontsize{22}{28}\selectfont\textbf{Fraudster Evolution Simulator}}\\[0.5cm]
+{\fontsize{14}{18}\selectfont Adaptive Fraud Detection under Adversarial\\[0.2cm]
+Concept Drift in South African Banking}
+
+\vspace{0.6cm}
+\textcolor{spugold}{\rule{\textwidth}{0.6pt}}
+\vspace{1.5cm}
+
+{\fontsize{12}{16}\selectfont\textbf{Author}}\\[0.4cm]
+{\fontsize{14}{18}\selectfont\textbf{Tshegofatso Shabangu}}\\[0.2cm]
+{\fontsize{10}{13}\selectfont Student Number: 202436819}\\[0.2cm]
+{\fontsize{10}{13}\selectfont BSc Computer Science and Mathematics (Final Year)}\\[0.2cm]
+{\fontsize{10}{13}\selectfont Sol Plaatje University, Kimberley, Northern Cape}
+
+\vspace{1.5cm}
+
+\begin{tabular}{C{4cm}C{4cm}C{4cm}}
+\textcolor{spugold}{\textbf{Pipeline}} & \textcolor{spugold}{\textbf{Dataset}} & \textcolor{spugold}{\textbf{Date}} \\[0.3cm]
+PostgreSQL 16 $\rightarrow$ R $\rightarrow$ Python & 2,016,000 SA Transactions & June 2026 \\
+\end{tabular}
+
+\vspace{1.5cm}
+
+\begin{tabular}{C{3.5cm}C{3.5cm}C{3.5cm}}
+\textcolor{spugold}{\textbf{ROC-AUC}} & \textcolor{spugold}{\textbf{PR-AUC}} & \textcolor{spugold}{\textbf{F1 Score}} \\[0.3cm]
+{\Large\textbf{0.9349}} & {\Large\textbf{0.8868}} & {\Large\textbf{0.9142}} \\
+\end{tabular}
+
+\vfill
+{\fontsize{9}{12}\selectfont\textcolor{midgray}{
+GitHub: github.com/Tshegointech \quad | \quad
+Email: Tshegofatsoskhumbuzo@gmail.com
+}}
+\end{titlepage}
+
+\nopagecolor
+\color{black}
+
+% ── table of contents ─────────────────────────────────────────────────────────
+\newpage
+\tableofcontents
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Abstract}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+This report presents the Fraudster Evolution Simulator, a machine learning system designed to detect financial fraud in South African banking environments under conditions of adversarial concept drift. Fraudsters continuously adapt their methods, causing static detection models to degrade over time. This project demonstrates that engineering behavioural features based on transaction velocity and amount deviation from customer history produces a model that remains stable across four years of evolving fraud patterns. A synthetic dataset of 2,016,000 transactions was generated with four distinct fraud phases, each characterised by a different dominant fraud type: card skimming (2021), account takeover (2022), SIM swap and PayShap abuse (2023), and synthetic identity rings (2024). Statistical analysis using Wilcoxon rank-sum and Pearson chi-square tests confirms that transaction velocity and amount z-score are the primary discriminating signals, while credit features carry no significant discriminating power for fraud detection. The final XGBoost model achieves a ROC-AUC of 0.9349, PR-AUC of 0.8868, precision of 96.56\%, and recall of 86.81\%. Population Stability Index analysis confirms that the model score distribution remains stable across all four phases, with PSI values below 0.001.
+
+\vspace{0.5cm}
+\noindent\textbf{Keywords:} fraud detection, concept drift, XGBoost, SHAP, PSI, South Africa, PayShap, behavioural features, transaction velocity, synthetic data.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+South African banking fraud losses exceeded R3.8 billion in 2023, driven by a rapid shift in criminal methodology from physical card skimming to digital attack vectors including SIM swap fraud, PayShap real-time payment abuse, and organised synthetic identity rings \cite{sabric2023}. This evolution of criminal behaviour presents a fundamental challenge for machine learning-based detection systems: a model trained on historical fraud patterns may fail to detect new attack methods even when the underlying financial indicators are similar.
+
+This phenomenon is known as concept drift, defined formally as a change in the joint probability distribution $P(X, y)$ over time, where $X$ represents transaction features and $y$ represents the fraud label. In the context of banking fraud, concept drift is adversarial: criminals actively learn which behaviours trigger detection and modify their tactics accordingly.
+
+The Fraudster Evolution Simulator addresses this challenge through a key architectural insight. Rather than modelling fraud by type (which changes across phases), the system models fraud by behavioural signature (which remains stable). Fraudsters of every type must conduct unusual volumes of transactions in short time windows and spend amounts that are anomalous relative to the victim's own history. These signals persist regardless of whether the fraud vector is a stolen card, a SIM swap, or a synthetic identity.
+
+This project contributes the following:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item A 2,016,000-record synthetic SA banking dataset with controlled concept drift across four fraud phases.
+    \item Statistical proof using Wilcoxon rank-sum and chi-square tests that behavioural features significantly discriminate fraud from legitimate transactions while credit features do not.
+    \item An XGBoost fraud detection model that maintains stable performance across all four drift phases, confirmed by PSI analysis.
+    \item SHAP-based explainability showing the precise contribution of each feature to individual predictions.
+\end{itemize}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Background and Related Work}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Concept Drift in Fraud Detection}
+
+Concept drift was first formalised by \cite{widmer1996} as the phenomenon where the target concept changes over time in ways that cannot be predicted by the learner. In supervised learning, this manifests as a degradation in model performance that is independent of data quantity or model complexity.
+
+In fraud detection, two types of drift are relevant. Gradual drift occurs when fraud rates and patterns shift slowly over months, as observed in the year-on-year increase in fraud rates documented in this dataset from 6.34\% in 2021 to 7.18\% in 2024. Sudden drift occurs when a new fraud vector emerges rapidly and displaces existing patterns, as seen in the near-complete disappearance of card skimming in Phase 4 and its replacement by synthetic identity fraud.
+
+\subsection{XGBoost for Imbalanced Classification}
+
+Extreme Gradient Boosting (XGBoost) \cite{chen2016} has demonstrated state-of-the-art performance in tabular fraud detection tasks \cite{dal2015}. The algorithm minimises a regularised objective that combines a differentiable loss function and a complexity penalty on the tree structure. For imbalanced datasets, the \texttt{scale\_pos\_weight} parameter adjusts the gradient updates for positive (minority) class examples.
+
+\subsection{SHAP Explainability}
+
+Shapley Additive Explanations (SHAP) \cite{lundberg2017} provide a unified framework for model interpretation grounded in cooperative game theory. For each prediction, SHAP decomposes the output into contributions from individual features, satisfying the axioms of efficiency, symmetry, dummy, and linearity. TreeSHAP \cite{lundberg2018} provides exact Shapley values for tree-based models in polynomial time.
+
+\subsection{Population Stability Index}
+
+The Population Stability Index (PSI) is an industry-standard metric used in banking model validation to detect distributional shift between development and deployment populations \cite{siddiqi2006}. PSI below 0.10 indicates a stable model, 0.10 to 0.20 indicates monitoring is required, and above 0.20 indicates significant drift requiring model retraining.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Dataset}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Synthetic Data Generation}
+
+The dataset was generated programmatically in Python using NumPy with a fixed random seed for reproducibility. The generation process produced 2,016,000 transaction records across 200,000 unique South African customer profiles, spanning January 2021 to December 2024.
+
+SA-specific realism was embedded throughout: transaction amounts follow log-normal distributions calibrated to South African retail spending patterns (median R412 for legitimate transactions), merchant names and categories reflect the South African retail landscape (Shoprite, Pick n Pay, Engen, Nando's), province distributions follow Statistics SA population proportions, and fraud patterns reflect documented SA banking threat intelligence including SIM swap attacks, PayShap instant payment abuse, and USSD channel exploitation.
+
+\subsection{Concept Drift Design}
+
+Four fraud phases were engineered with distinct dominant fraud types, as summarised in Table~\ref{tab:phases}.
+
+\begin{table}[H]
+\centering
+\caption{Fraud phase design across the dataset timeline}
+\label{tab:phases}
+\begin{tabular}{C{1.5cm}C{2cm}C{3cm}C{5cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Phase}} &
+\textcolor{white}{\textbf{Year}} &
+\textcolor{white}{\textbf{Dominant Type}} &
+\textcolor{white}{\textbf{Criminal Rationale}} \\
+\midrule
+1 & 2021 & Card skimming & Physical POS terminal compromise \\
+\rowcolor{lightgray}
+2 & 2022 & Account takeover & Credential stuffing and phishing \\
+3 & 2023 & SIM swap & Telecom API exploitation for OTP bypass \\
+\rowcolor{lightgray}
+4 & 2024 & Synthetic identity & Organised identity fabrication rings \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Intentional Data Quality Issues}
+
+To reflect real-world banking data, the following quality issues were deliberately injected:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Missing values}: 15\% of income records, 8\% of credit scores, 44\% of IP addresses (structural: ATM transactions have no IP), 12\% of merchant city records.
+    \item \textbf{Format inconsistencies}: dates in four formats (YYYY-MM-DD, DD/MM/YYYY, MM-DD-YYYY, DD Mon YYYY), province names in seven variants per province, gender in ten variants.
+    \item \textbf{Outliers}: negative transaction amounts, amounts exceeding R1,000,000, credit utilisation above 1.0, days past due below zero, hour-of-day values outside 0 to 23.
+    \item \textbf{Label noise}: 3\% null fraud labels (unlabelled records) and 1\% flipped labels.
+    \item \textbf{Duplicate records}: 1.88\% duplicate transaction IDs and 0.4\% fully identical rows.
+\end{itemize}
+
+\subsection{Dataset Summary Statistics}
+
+\begin{table}[H]
+\centering
+\caption{Dataset summary statistics after cleaning}
+\label{tab:summary}
+\begin{tabular}{L{5cm}R{4cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Statistic}} & \textcolor{white}{\textbf{Value}} \\
+\midrule
+Total raw records & 2,016,000 \\
+\rowcolor{lightgray}
+Records after cleaning & 1,935,880 \\
+Unlabelled records (held aside) & 60,126 \\
+\rowcolor{lightgray}
+Unique customers & 199,992 \\
+Date range & Jan 2021 to Dec 2024 \\
+\rowcolor{lightgray}
+Overall fraud rate & 6.97\% \\
+Training set (2021 to 2022) & 968,282 records \\
+\rowcolor{lightgray}
+Test set (2023 to 2024) & 967,598 records \\
+Features in model & 33 \\
+\rowcolor{lightgray}
+Median legitimate amount & R412.75 \\
+Median fraud amount & R1,499.92 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Data Cleaning Pipeline}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Pipeline Architecture}
+
+The cleaning pipeline follows the project's fixed technical stack:
+
+\[
+\text{Raw CSV} \;\rightarrow\; \underbrace{\text{PostgreSQL 16}}_{\text{storage}} \;\rightarrow\; \underbrace{\text{R (RStudio)}}_{\text{statistical analysis}} \;\rightarrow\; \underbrace{\text{Python (JupyterLab)}}_{\text{cleaning, EDA, modelling}}
+\]
+
+Raw data was loaded into PostgreSQL using the \texttt{\textbackslash copy} command via \texttt{/tmp/} staging to avoid server-side permission restrictions. All 33 columns were stored as \texttt{TEXT} to prevent rejection of malformed records during ingestion.
+
+\subsection{Missing Value Imputation}
+
+Median imputation was rejected in favour of Predictive Mean Matching (PMM) implemented via the \texttt{miceforest} library. PMM selects observed values whose predicted values are closest to the target and draws imputed values from that pool, preserving the marginal distribution of each variable. This is especially important for skewed variables such as \texttt{monthly\_income\_zar}.
+
+Four columns received PMM imputation: \texttt{credit\_score} (7.8\% missing), \texttt{monthly\_income\_zar} (15.0\% missing), \texttt{distance\_from\_home\_km} (10.0\% missing), and \texttt{days\_since\_last\_txn} (5.0\% missing).
+
+The IP address column (44\% missing) was not imputed. Instead, a binary indicator feature \texttt{has\_ip} was engineered, reflecting the structural nature of this missingness: ATM transactions never carry an IP address.
+
+\subsection{Date Parsing}
+
+Dates in non-ISO formats were recovered using a two-stage parser: first attempting \texttt{pd.to\_datetime} with \texttt{format=`mixed'}, then falling back to \texttt{dateutil.parser} for ambiguous formats. Of the 292,594 non-standard dates, 282,564 were recovered, with 10,030 remaining null and subsequently dropped.
+
+\subsection{Standardisation}
+
+Province names were mapped to nine canonical South African province names, collapsing 63 distinct raw variants. Gender was standardised to Male, Female, and Other from ten raw variants. Transaction amounts were clipped to a maximum of R1,000,000 and negative amounts were removed. Credit utilisation was clipped to the range [0, 1] and days past due was clipped to be non-negative.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Statistical Analysis}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+Statistical analysis was conducted in R using a 500,000-record stratified sample drawn from \texttt{staging.transactions} via \texttt{DBI} and \texttt{RPostgres}.
+
+\subsection{Wilcoxon Rank-Sum Test}
+
+The Wilcoxon rank-sum test was used to assess whether continuous features differ significantly between fraud and legitimate transactions. The test is non-parametric and appropriate because transaction amount and velocity features are severely right-skewed and cannot be assumed to follow a normal distribution.
+
+The test statistic $W$ is defined as:
+
+\begin{equation}
+    W = \sum_{i \in \text{fraud}} \text{rank}(x_i) - \frac{n_1(n_1 + 1)}{2}
+    \label{eq:wilcoxon}
+\end{equation}
+
+where $n_1$ is the number of fraud observations and \text{rank}$(x_i)$ is the rank of observation $i$ in the combined sample. Results are presented in Table~\ref{tab:wilcoxon}.
+
+\begin{table}[H]
+\centering
+\caption{Wilcoxon rank-sum test results for continuous features}
+\label{tab:wilcoxon}
+\begin{tabular}{L{4.5cm}R{2.5cm}R{2.5cm}C{2.5cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Feature}} &
+\textcolor{white}{\textbf{W statistic}} &
+\textcolor{white}{\textbf{p-value}} &
+\textcolor{white}{\textbf{Significant}} \\
+\midrule
+amount\_zar & 3,953,663,245 & $<2.2\times10^{-16}$ & Yes \\
+\rowcolor{lightgray}
+txn\_velocity\_1h & 1,189,910,456 & $<2.2\times10^{-16}$ & Yes \\
+txn\_velocity\_24h & 1,189,910,456 & $<2.2\times10^{-16}$ & Yes \\
+\rowcolor{lightgray}
+amount\_zscore\_30d & 1,530,078,092 & $<2.2\times10^{-16}$ & Yes \\
+credit\_score & 6,936,590,354 & 0.2356 & No \\
+\rowcolor{lightgray}
+credit\_utilization & 8,116,524,184 & 0.7128 & No \\
+days\_past\_due & 8,116,129,566 & 0.7015 & No \\
+\rowcolor{lightgray}
+monthly\_income\_zar & 5,885,776,993 & 0.5971 & No \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Behavioural transaction features are highly significant ($p < 2.2 \times 10^{-16}$), while all credit features are non-significant ($p > 0.05$). This finding is fundamental to the model's architecture: credit features are excluded from the Fraudster Evolution Simulator and reserved for the companion credit scoring model.
+
+\subsection{Pearson Chi-Square Test}
+
+Categorical features were assessed using Pearson chi-square tests. The test statistic is:
+
+\begin{equation}
+    \chi^2 = \sum_{i=1}^{r} \sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+    \label{eq:chisquare}
+\end{equation}
+
+where $O_{ij}$ and $E_{ij}$ are observed and expected counts in cell $(i, j)$ of the contingency table. Both \texttt{txn\_type} ($\chi^2 = 1461.9$, df = 7, $p < 2.2 \times 10^{-16}$) and \texttt{channel} ($\chi^2 = 1648.1$, df = 5, $p < 2.2 \times 10^{-16}$) are highly significant. Channel is the stronger discriminator.
+
+\subsection{Concept Drift: Kruskal-Wallis and Chi-Square Tests}
+
+To formally confirm concept drift, two tests were applied to the fraud-only subset.
+
+The Kruskal-Wallis test assessed whether fraud transaction amounts differ across years:
+
+\begin{equation}
+    H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
+    \label{eq:kruskal}
+\end{equation}
+
+where $N$ is the total number of observations, $k$ is the number of groups, $n_i$ is the size of group $i$, and $R_i$ is the sum of ranks in group $i$. The result ($H = 5.30$, df = 3, $p = 0.151$) was non-significant: fraud amounts do not change across years.
+
+The chi-square test on fraud type by year yielded $\chi^2 = 44{,}419$, df = 36, $p < 2.2 \times 10^{-16}$. The fraud type distribution changes dramatically across years. This confirms the core finding: \textbf{criminals do not steal more or less over time, they steal differently}.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Feature Engineering}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Behavioural Features}
+
+\begin{description}[leftmargin=2cm, style=nextline]
+    \item[\texttt{amount\_log}] Log transformation of transaction amount to reduce right skew:
+    \[
+        x_{\log} = \log(1 + \text{amount\_zar})
+    \]
+
+    \item[\texttt{velocity\_ratio}] Ratio of 1-hour to 24-hour transaction velocity, capturing burst behaviour:
+    \[
+        r_v = \frac{v_{1h}}{v_{24h} + 1}
+    \]
+
+    \item[\texttt{income\_txn\_ratio}] Transaction amount relative to the customer's monthly income:
+    \[
+        r_i = \frac{\text{amount\_zar}}{\text{monthly\_income\_zar} + 1}
+    \]
+
+    \item[\texttt{credit\_stress}] Composite credit stress index combining utilisation, overdue days, and credit score:
+    \[
+        s_c = \frac{\text{credit\_utilization} \times \text{days\_past\_due}}{\text{credit\_score} + 1}
+    \]
+
+    \item[\texttt{channel\_risk\_score}] Channel-level empirical fraud rates derived from exploratory analysis, encoding the observation that PayShap and third-party API channels carry the highest fraud risk.
+\end{description}
+
+\subsection{Binary Flags}
+
+Time-based binary features encode known high-risk periods:
+
+\[
+    \text{is\_night} = \mathbf{1}[\text{hour} \leq 4 \;\cup\; \text{hour} \geq 22], \qquad
+    \text{is\_weekend} = \mathbf{1}[\text{day\_of\_week} \in \{5, 6\}]
+\]
+
+\[
+    \text{new\_account\_flag} = \mathbf{1}[\text{account\_age\_days} < 180]
+\]
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Model Architecture}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Temporal Train-Test Split}
+
+The dataset was split temporally rather than randomly. Training used 2021 to 2022 records (968,282 rows, 6.66\% fraud) and testing used 2023 to 2024 records (967,598 rows, 7.28\% fraud). Random splitting was rejected because it would allow future fraud patterns to leak into the training set, producing an optimistically biased estimate of real-world performance.
+
+\subsection{XGBoost Objective Function}
+
+XGBoost minimises the regularised objective:
+
+\begin{equation}
+    \mathcal{L}(\phi) = \sum_{i} l(\hat{y}_i, y_i) + \sum_{k} \Omega(f_k)
+    \label{eq:xgb_obj}
+\end{equation}
+
+where $l$ is the differentiable binary cross-entropy loss, $f_k$ represents the $k$-th tree, and the regularisation term is:
+
+\begin{equation}
+    \Omega(f) = \gamma T + \frac{1}{2}\lambda \|w\|^2
+    \label{eq:xgb_reg}
+\end{equation}
+
+with $T$ denoting the number of leaves, $w$ the leaf weights, $\gamma$ the minimum gain required for a split, and $\lambda$ the L2 penalty on leaf weights.
+
+\subsection{Class Imbalance Handling}
+
+With a 6.97\% fraud rate (roughly 1 fraud per 14 legitimate transactions), class imbalance was addressed via the \texttt{scale\_pos\_weight} parameter:
+
+\begin{equation}
+    w_{\text{pos}} = \frac{|\{y_i = 0\}|}{|\{y_i = 1\}|} = \frac{900{,}985}{64{,}297} \approx 14.01
+    \label{eq:scale}
+\end{equation}
+
+This increases the gradient contribution of minority-class examples by a factor of $w_{\text{pos}}$, effectively reweighting the loss function to penalise missed fraud detections more heavily.
+
+\subsection{Hyperparameters}
+
+\begin{table}[H]
+\centering
+\caption{XGBoost hyperparameters}
+\label{tab:hyperparams}
+\begin{tabular}{L{5cm}C{3cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Parameter}} & \textcolor{white}{\textbf{Value}} \\
+\midrule
+n\_estimators & 500 \\
+\rowcolor{lightgray}
+max\_depth & 6 \\
+learning\_rate & 0.05 \\
+\rowcolor{lightgray}
+subsample & 0.80 \\
+colsample\_bytree & 0.80 \\
+\rowcolor{lightgray}
+scale\_pos\_weight & 14.01 \\
+eval\_metric & aucpr \\
+\rowcolor{lightgray}
+early\_stopping\_rounds & 20 \\
+random\_state & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Results}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Exploratory Data Analysis}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/fig1_concept_drift.pdf}
+    \caption{Fraud rate by year, showing a steady upward trend from 6.34\% in 2021 to 7.18\% in 2024. The Kruskal-Wallis test on fraud amounts is non-significant ($p = 0.151$), confirming that the drift is in fraud method, not fraud magnitude.}
+    \label{fig:drift}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_fraud_type_heatmap.pdf}
+    \caption{Fraud type evolution across four phases. Card skimming dominates Phase 1 with 9,471 cases and falls to 20 cases in Phase 4. Synthetic identity rises from 100 cases in Phase 1 to 9,100 in Phase 4. This shift is confirmed statistically by $\chi^2 = 44{,}419$, $p < 2.2 \times 10^{-16}$.}
+    \label{fig:heatmap}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_channel_txn_fraud.pdf}
+    \caption{Fraud rates by channel (left) and transaction type (right). PayShap carries the highest fraud rate at 10.2\%, reflecting its role as an instant-settlement payment system that is attractive to SIM swap and money mule operators. Branch transactions have the lowest fraud rate at 4.2\%.}
+    \label{fig:channel}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig4_amount_distribution.pdf}
+    \caption{Transaction amount distributions on a log scale (left) and descriptive statistics by fraud label (right). Fraud transactions have a median of R1,500 compared to R413 for legitimate transactions, a ratio of 3.6. The Wilcoxon test confirms this separation is statistically significant ($W = 3.95 \times 10^9$, $p < 2.2 \times 10^{-16}$).}
+    \label{fig:amounts}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig9_velocity_zscore.pdf}
+    \caption{Velocity (left) and amount z-score (right) distributions by fraud label. Legitimate transactions cluster at 0 to 2 transactions per hour; fraud transactions spread uniformly across 4 to 14. The z-score distributions are almost completely separated, centred at 0 for legitimate and 2.8 for fraud.}
+    \label{fig:velocity}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig8_hour_fraud.pdf}
+    \caption{Fraud rate by hour of day. Night hours (22:00 to 04:00) carry fraud rates above 8\%, roughly 1.4x higher than the 6.4\% rate during business hours. This pattern reflects both SIM swap execution timing and reduced human oversight during night shifts.}
+    \label{fig:hour}
+\end{figure}
+
+\subsection{Overall Model Performance}
+
+\begin{table}[H]
+\centering
+\caption{Overall model performance on the 2023 to 2024 test set}
+\label{tab:results}
+\begin{tabular}{L{4cm}R{3cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Metric}} & \textcolor{white}{\textbf{Value}} \\
+\midrule
+ROC-AUC & 0.9349 \\
+\rowcolor{lightgray}
+PR-AUC & 0.8868 \\
+F1 Score & 0.9142 \\
+\rowcolor{lightgray}
+Precision & 0.9656 \\
+Recall & 0.8681 \\
+\rowcolor{lightgray}
+Accuracy & 0.9900 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The precision of 96.56\% indicates that when the model flags a transaction as fraudulent, it is correct in 96.56\% of cases. This minimises the false positive rate, which is critical in a banking context where incorrectly blocking legitimate transactions damages customer relationships. The recall of 86.81\% indicates that the model detects 86.81\% of all actual fraud events.
+
+\subsection{Performance Across Drift Phases}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{figures/fig6_phase_performance.pdf}
+    \caption{Model performance across all four phases. ROC-AUC holds between 0.9328 and 0.9377, and recall improves from 0.8513 in Phase 1 to 0.8713 in Phase 4, demonstrating that the behavioural feature set is robust to the concept drift introduced across phases.}
+    \label{fig:phase_perf}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Phase-level performance breakdown}
+\label{tab:phase_results}
+\begin{tabular}{C{2cm}C{2cm}C{2cm}C{2cm}C{2cm}C{2cm}}
+\toprule
+\rowcolor{spunavy}
+\textcolor{white}{\textbf{Phase}} &
+\textcolor{white}{\textbf{Year}} &
+\textcolor{white}{\textbf{ROC-AUC}} &
+\textcolor{white}{\textbf{PR-AUC}} &
+\textcolor{white}{\textbf{Precision}} &
+\textcolor{white}{\textbf{Recall}} \\
+\midrule
+Phase 1 & 2021 & 0.9328 & 0.8752 & 0.9627 & 0.8513 \\
+\rowcolor{lightgray}
+Phase 2 & 2022 & 0.9377 & 0.8813 & 0.9626 & 0.8605 \\
+Phase 3 & 2023 & 0.9337 & 0.8838 & 0.9640 & 0.8647 \\
+\rowcolor{lightgray}
+Phase 4 & 2024 & 0.9361 & 0.8897 & 0.9671 & 0.8713 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Population Stability Index}
+
+The PSI measures the divergence between the model's score distribution at training time and at deployment:
+
+\begin{equation}
+    \text{PSI} = \sum_{i=1}^{B} \left( p_i^{\text{actual}} - p_i^{\text{expected}} \right) \ln\left( \frac{p_i^{\text{actual}}}{p_i^{\text{expected}}} \right)
+    \label{eq:psi}
+\end{equation}
+
+where $B$ is the number of score bins and $p_i$ is the proportion of scores falling in bin $i$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/fig7_psi.pdf}
+    \caption{PSI values comparing the 2021 baseline score distribution against subsequent years. All PSI values are below 0.001, far below the stability threshold of 0.10. The model score distribution is invariant to the concept drift present in the fraud type composition.}
+    \label{fig:psi}
+\end{figure}
+
+\subsection{Feature Importance: SHAP Analysis}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig5_shap_bar.pdf}
+    \caption{Mean absolute SHAP values across a 5,000-record sample. Transaction velocity over 24 hours and 1 hour dominate all other features. The amount z-score relative to the customer's 30-day history is third. All credit features fall below the significance threshold, confirming the Wilcoxon test findings from the statistical analysis phase.}
+    \label{fig:shap}
+\end{figure}
+
+The Shapley value for feature $j$ and prediction $i$ is computed as:
+
+\begin{equation}
+    \phi_j(i) = \sum_{S \subseteq F \setminus \{j\}} \frac{|S|!\,(|F| - |S| - 1)!}{|F|!} \left[ f_{S \cup \{j\}}(x_{S \cup \{j\}}^{(i)}) - f_S(x_S^{(i)}) \right]
+    \label{eq:shap}
+\end{equation}
+
+where $F$ is the set of all features, $S$ is a subset excluding feature $j$, and $f_S$ is the model prediction using only features in $S$.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Discussion}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\subsection{The Behavioural Invariance Finding}
+
+The central finding of this project is that behavioural features, specifically transaction velocity and amount deviation from customer history, are invariant to the concept drift introduced by evolving fraud methods. This contrasts with the findings of the preceding project in this series (Project 4: SANDSTORM), where features directly encoding fraud-type-specific behaviour caused complete model collapse under concept drift.
+
+The explanation is intuitive. A fraudster committing SIM swap fraud, account takeover, or synthetic identity fraud must, in every case, execute an unusual number of transactions in a short window and spend amounts that are anomalous relative to the victim's established behaviour. The behavioural signature is the same even when the attack vector is completely different.
+
+\subsection{PayShap as a High-Risk Channel}
+
+PayShap's fraud rate of 10.2\% across all transaction types and up to 11.97\% when combined with online banking is the highest of any channel or transaction type combination in the dataset. This reflects the design of instant payment systems: transactions settle in seconds and cannot be reversed after processing, creating a narrow but exploitable window for fraudsters who have obtained channel access through SIM swap or credential theft.
+
+\subsection{Credit Feature Independence}
+
+The statistical independence of credit features from fraud labels (all Wilcoxon p-values above 0.23) has an important practical implication. Fraud can be committed against any customer regardless of their creditworthiness. High credit score customers are not lower fraud risk; they may simply be more attractive targets for synthetic identity and account takeover attacks. Models that include credit features in fraud detection introduce unnecessary noise and may introduce unfair disparate impact on lower-income customers.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Limitations}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\begin{enumerate}[leftmargin=1.5cm]
+
+    \item \textbf{Synthetic dataset.} All 2,016,000 records were generated programmatically. While SA-specific distributions and fraud patterns were embedded, the dataset cannot capture the full complexity of real banking transaction logs, including legitimate but unusual spending events, seasonal patterns, stokvel contributions, or the exact correlation structures present in production data.
+
+    \item \textbf{Static model.} The XGBoost model is trained once on 2021 to 2022 data and evaluated on 2023 to 2024 data. A production-grade system would implement online learning or periodic retraining triggered by PSI thresholds. No retraining mechanism is implemented in this project.
+
+    \item \textbf{Temporal resolution.} Concept drift was designed at annual granularity (one phase per year). In practice, fraud method transitions occur on a timescale of weeks to months, not years. The PSI stability results may be optimistic relative to real-world drift speeds.
+
+    \item \textbf{No graph features.} Money mule rings and synthetic identity fraud involve coordinated activity across multiple accounts. Graph-based features encoding relationships between accounts, devices, and IP addresses would likely improve detection of these fraud types. Graph neural network approaches are beyond the scope of this project.
+
+    \item \textbf{Label noise.} Approximately 3\% of fraud labels were deliberately set to null and 1\% were flipped to simulate real-world labelling imperfection. The model was trained on the noisy labels without any label correction procedure. Semi-supervised learning approaches could recover performance from these unlabelled records.
+
+    \item \textbf{Single algorithm.} Only XGBoost was evaluated. Ensemble approaches combining gradient boosting, isolation forest for anomaly detection, and a calibrated probability model may outperform a single XGBoost classifier, particularly on the unlabelled 60,126 records.
+
+\end{enumerate}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+This project developed the Fraudster Evolution Simulator, a fraud detection system for South African banking that maintains stable performance under adversarial concept drift. The key findings are as follows.
+
+Transaction velocity and amount deviation from customer history are the dominant fraud signals, confirmed by Wilcoxon rank-sum tests ($p < 2.2 \times 10^{-16}$) and SHAP analysis. Credit features including credit score, utilisation, and days past due carry no discriminating power for fraud detection and were excluded from the model.
+
+The fraud type distribution changed completely between 2021 and 2024, confirmed by a chi-square test ($\chi^2 = 44{,}419$, $p < 2.2 \times 10^{-16}$). Card skimming, which dominated Phase 1 with 9,471 cases, fell to 20 cases in Phase 4 and was replaced by synthetic identity fraud. However, the model's ROC-AUC held between 0.9328 and 0.9361 across all four phases, and PSI values remained below 0.001, confirming that behavioural features are drift-resistant.
+
+The final model achieves a ROC-AUC of 0.9349, PR-AUC of 0.8868, precision of 96.56\%, and recall of 86.81\% on the 2023 to 2024 test set.
+
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Author Biography}
+% ═══════════════════════════════════════════════════════════════════════════════
+
+\begin{mdframed}[
+    linecolor=spunavy,
+    linewidth=1pt,
+    innerleftmargin=14pt,
+    innerrightmargin=14pt,
+    innertopmargin=12pt,
+    innerbottommargin=12pt,
+    backgroundcolor=lightgray,
+]
+\noindent\textbf{\textcolor{spunavy}{Tshegofatso Shabangu}} (Student Number: 202436819) is a final-year BSc Computer Science and Mathematics student at Sol Plaatje University in Kimberley, Northern Cape. He serves as a tutor for Advanced Calculus (NMAT623), providing academic support to second-year mathematics students. He holds the position of Outreach Officer at the SPU Innovation Lab, where he coordinates community engagement and student technology initiatives. He serves on the Fundraising and Sponsorship Committee for Deep Learning IndabaX SA 2026, hosted at the University of KwaZulu-Natal and expected to host over 400 attendees from across the African machine learning community. He mentors students through the BRICS Astronomy Working Group. He was awarded first place at the AFAS Data Science Hackathon 2026 for a machine learning classifier applied to astronomical survey data.
+
+\vspace{0.5em}
+\noindent\textbf{GitHub:} \href{https://github.com/Tshegointech}{github.com/Tshegointech} \quad \textbf{Email:} Tshegofatsoskhumbuzo@gmail.com
+\end{mdframed}
+
+% ═══════════════════════════════════════════════════════════════════════════════
+%  REFERENCES
+% ═══════════════════════════════════════════════════════════════════════════════
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{sabric2023}
+South African Banking Risk Information Centre (SABRIC). (2023).
+\textit{Annual Crime Statistics 2023}.
+SABRIC, Johannesburg.
+
+\bibitem{widmer1996}
+Widmer, G., \& Kubat, M. (1996).
+Learning in the presence of concept drift and hidden contexts.
+\textit{Machine Learning}, 23(1), 69--101.
+
+\bibitem{chen2016}
+Chen, T., \& Guestrin, C. (2016).
+XGBoost: A scalable tree boosting system.
+\textit{Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining}, 785--794.
+
+\bibitem{dal2015}
+Dal Pozzolo, A., Caelen, O., Johnson, R. A., \& Bontempi, G. (2015).
+Calibrating probability with undersampling for unbalanced classification.
+\textit{IEEE Symposium Series on Computational Intelligence}, 159--166.
+
+\bibitem{lundberg2017}
+Lundberg, S. M., \& Lee, S.-I. (2017).
+A unified approach to interpreting model predictions.
+\textit{Advances in Neural Information Processing Systems}, 30.
+
+\bibitem{lundberg2018}
+Lundberg, S. M., Erion, G. G., \& Lee, S.-I. (2018).
+Consistent individualized feature attribution for tree ensembles.
+\textit{arXiv preprint arXiv:1802.03888}.
+
+\bibitem{siddiqi2006}
+Siddiqi, N. (2006).
+\textit{Credit Risk Scorecards: Developing and Implementing Intelligent Credit Scoring}.
+Wiley.
+
+\bibitem{gama2014}
+Gama, J., \v{Z}liobait\.{e}, I., Bifet, A., Pechenizkiy, M., \& Bouchachia, A. (2014).
+A survey on concept drift adaptation.
+\textit{ACM Computing Surveys}, 46(4), 1--37.
+
+\end{thebibliography}
+
+\end{document}
